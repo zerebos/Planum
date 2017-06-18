@@ -1,0 +1,84 @@
+newusers at 2017-06-02 02:51:53.473492: Called by: Zerebos#7790 (ID: 249746236008169473) in Channel: general (ID: 292141134614888448)
+Guild: Zere's Place (ID: 292141134614888448). More info: ```py
+Traceback (most recent call last):
+  File "C:\Users\Zack\AppData\Local\Programs\Python\Python36-32\lib\site-packages\discord\ext\commands\core.py", line 50, in wrapped
+    ret = yield from coro(*args, **kwargs)
+  File "C:\Users\Zack\PycharmProjects\BotTemplate\cogs\meta.py", line 251, in newusers
+    body = 'joined {0}, created {1}'.format(human_timedelta(member.joined_at),
+NameError: name 'human_timedelta' is not defined
+
+```
+leaders at 2017-06-02 05:19:37.995514: Called by: Zerebos#7790 (ID: 249746236008169473) in Channel: general (ID: 292141134614888448)
+Guild: Zere's Place (ID: 292141134614888448). More info: ```py
+Traceback (most recent call last):
+  File "C:\Users\Zack\AppData\Local\Programs\Python\Python36-32\lib\site-packages\discord\ext\commands\core.py", line 50, in wrapped
+    ret = yield from coro(*args, **kwargs)
+  File "C:/Users/Zack/PycharmProjects/VeteranKenji/VeteranKenji.py", line 118, in leaders
+    peeps.append(' | '.join(info))
+TypeError: sequence item 0: expected str instance, Member found
+
+```
+givexp at 2017-06-09 09:56:18.231843: Called by: Zerebos#7790 (ID: 249746236008169473) in Channel: locker-room (ID: 322620751817736192)
+Guild: 49ers (ID: 322620751817736192). More info: ```py
+Traceback (most recent call last):
+  File "C:\Users\Zack\AppData\Local\Programs\Python\Python36-32\lib\site-packages\discord\ext\commands\core.py", line 50, in wrapped
+    ret = yield from coro(*args, **kwargs)
+  File "C:\Users\Zack\PycharmProjects\Experientia\cogs\levels.py", line 123, in givexp
+    await self.increase_xp(player, ctx.message.channel, ctx.message.server, amount=amount)
+  File "C:\Users\Zack\PycharmProjects\Experientia\cogs\levels.py", line 86, in increase_xp
+    await self.bot.send_message(member, message.format(role=current_role))
+KeyError: 'name'
+
+```
+addrank at 2017-06-09 10:21:01.289669: Called by: Zerebos#7790 (ID: 249746236008169473) in Channel: dev_room (ID: 320760937231548426)
+Guild: Zere's Place (ID: 292141134614888448). More info: ```py
+Traceback (most recent call last):
+  File "C:\Users\Zack\AppData\Local\Programs\Python\Python36-32\lib\site-packages\discord\ext\commands\core.py", line 50, in wrapped
+    ret = yield from coro(*args, **kwargs)
+  File "C:\Users\Zack\PycharmProjects\Experientia\cogs\levels.py", line 139, in addrank
+    if all_roles[role]:
+KeyError: '@everyone'
+
+```
+addrank at 2017-06-09 10:21:31.714409: Called by: Zerebos#7790 (ID: 249746236008169473) in Channel: dev_room (ID: 320760937231548426)
+Guild: Zere's Place (ID: 292141134614888448). More info: ```py
+Traceback (most recent call last):
+  File "C:\Users\Zack\AppData\Local\Programs\Python\Python36-32\lib\site-packages\discord\ext\commands\core.py", line 50, in wrapped
+    ret = yield from coro(*args, **kwargs)
+  File "C:\Users\Zack\PycharmProjects\Experientia\cogs\levels.py", line 142, in addrank
+    await self.bot.say("Okay, I'll react to '{}'. What do you want me to say? (Type $none for no response)".format(reactor))
+NameError: name 'reactor' is not defined
+
+```
+leaderboard at 2017-06-09 10:55:25.228720: Called by: Zerebos#7790 (ID: 249746236008169473) in Channel: dev_room (ID: 320760937231548426)
+Guild: Zere's Place (ID: 292141134614888448). More info: ```py
+Traceback (most recent call last):
+  File "C:\Users\Zack\AppData\Local\Programs\Python\Python36-32\lib\site-packages\discord\ext\commands\core.py", line 50, in wrapped
+    ret = yield from coro(*args, **kwargs)
+  File "C:\Users\Zack\PycharmProjects\Experientia\cogs\levels.py", line 118, in leaderboard
+    level = "Level: " + str(players[p]['level'])
+TypeError: list indices must be integers or slices, not dict
+
+```
+leaderboard at 2017-06-09 11:08:36.134957: Called by: Zerebos#7790 (ID: 249746236008169473) in Channel: locker-room (ID: 322620751817736192)
+Guild: 49ers (ID: 322620751817736192). More info: ```py
+Traceback (most recent call last):
+  File "C:\Users\Zack\AppData\Local\Programs\Python\Python36-32\lib\site-packages\discord\ext\commands\core.py", line 50, in wrapped
+    ret = yield from coro(*args, **kwargs)
+  File "C:\Users\Zack\PycharmProjects\Experientia\cogs\levels.py", line 116, in leaderboard
+    players = sorted(players, key=lambda x: (x['level'],x['xp']), reverse=True)
+  File "C:\Users\Zack\PycharmProjects\Experientia\cogs\levels.py", line 116, in <lambda>
+    players = sorted(players, key=lambda x: (x['level'],x['xp']), reverse=True)
+TypeError: string indices must be integers
+
+```
+addrank at 2017-06-09 11:24:24.657209: Called by: Zerebos#7790 (ID: 249746236008169473) in Channel: dev_room (ID: 320760937231548426)
+Guild: Zere's Place (ID: 292141134614888448). More info: ```py
+Traceback (most recent call last):
+  File "C:\Users\Zack\AppData\Local\Programs\Python\Python36-32\lib\site-packages\discord\ext\commands\core.py", line 50, in wrapped
+    ret = yield from coro(*args, **kwargs)
+  File "C:\Users\Zack\PycharmProjects\Experientia\cogs\levels.py", line 174, in addrank
+    msg = await self.bot.say("Awesome! Now react to this message any reactions I should have to '{}'. (React \U000023f9 to stop)".format(reactor))
+NameError: name 'reactor' is not defined
+
+```

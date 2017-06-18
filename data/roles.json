@@ -1,0 +1,58 @@
+{
+  "292141134614888448": {
+    "meta": {},
+    "ranks": [
+      {
+        "role": "@everyone",
+        "start_level": 1,
+        "xp_per_level": 0,
+        "xp_per_message": 0
+      }
+    ]
+  },
+  "322620751817736192": {
+    "meta": {
+      "level_message": "Good job, {name}, you are now level {level}! You're one step closer to being a Hall-of-Famer!",
+      "rank_message": "Congratulations {name}, you've moved up in the world and are now a {role}!"
+    },
+    "ranks": [
+      {
+        "role": "Unknown",
+        "start_level": 1,
+        "xp_per_level": 10,
+        "xp_per_message": 1
+      },
+      {
+        "role": "Prospect",
+        "start_level": 10,
+        "xp_per_level": 30,
+        "xp_per_message": 1
+      },
+      {
+        "role": "Rookie",
+        "start_level": 20,
+        "xp_per_level": 60,
+        "xp_per_message": 1
+      },
+      {
+        "role": "Starter",
+        "start_level": 30,
+        "xp_per_level": 100,
+        "xp_per_message": 1
+      },
+      {
+        "role": "Pro-Bowler",
+        "start_level": 40,
+        "xp_per_level": 200,
+        "xp_per_message": 1
+      },
+      {
+        "role": "Hall-of-Famer",
+        "start_level": 50,
+        "xp_per_level": 500,
+        "xp_per_message": 1,
+        "message": "After all this time, you've finally done it, you're now a {role}!"
+      }
+    ]
+  }
+}
