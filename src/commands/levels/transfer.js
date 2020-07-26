@@ -1,5 +1,4 @@
 const {Command} = require("discord.js-commando");
-const oldData = require("../../../levels.json");
 
 const getLevel = xp => Math.round(Math.sqrt(4 * xp + 5) / Math.sqrt(20));
 
@@ -25,6 +24,7 @@ module.exports = class extends Command {
     }
     
     async run(msg) {
+        const oldData = require("../../../levels.json");
         const guildData = oldData[msg.guild.id];
         if (!guildData) return await msg.failure("This guild has no data to transfer");
         const ids = Object.keys(guildData);

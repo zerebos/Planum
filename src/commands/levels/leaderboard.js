@@ -16,7 +16,7 @@ module.exports = class extends Command {
     
     async run(msg) {
         const levels = msg.guild.settings.get("levels", {});
-        const leaders = Object.entries(levels).sort((a, b) => {
+        const leaders = Object.entries(levels).filter(e => msg.guild.members.cache.get(e[0])).sort((a, b) => {
             if (a[1].xp < b[1].xp) return -1;
             if (a[1].xp > b[1].xp) return 1;
             return 0;
