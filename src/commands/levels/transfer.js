@@ -89,7 +89,7 @@ module.exports = class extends Command {
         
         const member = guild.members.cache.get(id);
         if (!member) return; // uh oh
-        if (shouldHave.length) await member.roles.add(shouldHave.map(r => r.role), "Experientia Rewards");
-        if (shouldNotHave.length) await member.roles.remove(shouldNotHave.map(r => r.role), "Experientia Rewards");
+        if (shouldNotHave.length) await member.roles.remove(shouldNotHave.map(r => r.role), "Planum Rewards");
+        if (shouldHave.length) await member.roles.add(shouldHave.map(r => r.role), "Planum Rewards");
     }
 };

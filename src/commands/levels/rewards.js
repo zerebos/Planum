@@ -18,8 +18,7 @@ module.exports = class extends Command {
             group: "levels",
             memberName: "rewards",
             description: "See the levels leaders in the server.",
-            guildOnly: true,
-            userPermissions: ["MANAGE_ROLES"]
+            guildOnly: true
         });
     }
     

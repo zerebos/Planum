@@ -111,14 +111,14 @@ module.exports = class extends Command {
         const needToCheck = availableRewards.slice(1); // These lower roles need to be scrutinized
 
         // [top role for level, any below that should not be removed]
-        const shouldHave = [availableRewards.role, ...needToCheck.filter(r => !r.shouldRemove)]; 
+        const shouldHave = [availableRewards[0], ...needToCheck.filter(r => !r.shouldRemove)].map(r => r.role); 
 
         // [Roles above level (just in case adjusting downwards), any below that *should* be removed]
-        const shouldNotHave = [...rewards.filter(r => r.level > newLevel), ...needToCheck.filter(r => r.shouldRemove)];
+        const shouldNotHave = [...rewards.filter(r => r.level > newLevel), ...needToCheck.filter(r => r.shouldRemove)].map(r => r.role);
         
         const member = guild.members.cache.get(user.id);
         if (!member) return; // uh oh
-        if (shouldHave.length) await member.roles.add(shouldHave, "Experientia Rewards");
-        if (shouldNotHave.length) await member.roles.remove(shouldNotHave, "Experientia Rewards");
+        if (shouldNotHave.length) await member.roles.remove(shouldNotHave, "Planum Rewards");
+        if (shouldHave.length) await member.roles.add(shouldHave, "Planum Rewards");
     }
 };
