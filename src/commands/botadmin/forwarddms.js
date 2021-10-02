@@ -19,7 +19,7 @@ module.exports = class extends Command {
 
         // Ignore commands or responses to prompts
         if (!this.client.dispatcher.shouldHandleMessage(message)) return;
-        if (this.client.dispatcher.parseMessage(message)) return;
+        //if (this.client.dispatcher.parseMessage(message)) return;
 
         // Check if it should be forwarded
         const shouldForward = this.client.settings.get("forwarddms", true);

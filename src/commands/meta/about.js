@@ -45,7 +45,7 @@ module.exports = class extends Command {
         if (this.client.options.invite) aboutEmbed.addField(`Support Server`, `[Click Here!](${this.client.options.invite})`, true);
         if (this.client.options.github) aboutEmbed.addField(`GitHub`, `[Click Here!](${this.client.options.github})`, true);
 
-        const memberCount = bot.guilds.cache.map(g => g.members.cache.size).reduce((a, b) => a + b, 0).toLocaleString();
+        const memberCount = bot.guilds.cache.map(g => g.memberCount).reduce((a, b) => a + b, 0).toLocaleString();
         const servingText = `${bot.guilds.cache.size.toLocaleString()} Servers\n${memberCount} Users`;
         aboutEmbed.addField("Serving", servingText, true);
 
