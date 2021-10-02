@@ -10,16 +10,16 @@
   "author": "Zack Rauen",
   "license": "MIT",
   "dependencies": {
-    "bufferutil": "^4.0.1",
-    "cheerio": "^1.0.0-rc.3",
-    "discord.js": "^12.2.0",
+    "bufferutil": "^4.0.4",
+    "cheerio": "^1.0.0-rc.10",
+    "discord.js": "^12.5.3",
     "discord.js-commando": "github:discordjs/Commando",
     "emoji-regex": "^10.0.0",
     "erlpack": "github:discordapp/erlpack",
     "node-opus": "^0.3.3",
     "sodium": "^3.0.2",
-    "sqlite": "^3.0.6",
-    "string-similarity": "^4.0.1",
-    "utf-8-validate": "^5.0.2"
+    "sqlite": "^4.0.23",
+    "string-similarity": "^4.0.4",
+    "utf-8-validate": "^5.0.6"
   }
 }
