@@ -1,11 +1,11 @@
 {
-  "name": "experientia",
-  "version": "1.0.0",
+  "name": "planum",
+  "version": "1.1.1",
   "description": "Levelling bot for Discord.",
-  "main": "src/index.js",
+  "main": "src/planum.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js"
+    "start": "node src/planum.js"
   },
   "author": "Zack Rauen",
   "license": "MIT",
@@ -19,6 +19,7 @@
     "node-opus": "^0.3.3",
     "sodium": "^3.0.2",
     "sqlite": "^4.0.23",
+    "sqlite3": "git+https://github.com/mapbox/node-sqlite3.git",
     "string-similarity": "^4.0.4",
     "utf-8-validate": "^5.0.6"
   }
