@@ -35,7 +35,7 @@ module.exports = class extends Command {
     async onMessageReactionAdd(reaction, member) {
         const message = reaction.message;
         if (!message.guild) return; // Guilds only
-        if (member.bot) return; // Ignore bot
+        if (message.author.bot || member.bot) return; // Ignore bot
         // console.log(reaction.emoji.toString(), member.tag);
 
         const state = await message.guild.settings.get(dataId, defaultData);
@@ -46,11 +46,11 @@ module.exports = class extends Command {
             const logChannel = message.guild.channels.cache.get(state.log);
             // await message.channel.send(`Flagged message: ${message.id}`);
             const logEmbed = new MessageEmbed();
-            logEmbed.setAuthor(member.tag, member.displayAvatarURL(), message.url);
+            logEmbed.setAuthor(message.author.tag, message.author.displayAvatarURL(), message.url);
             logEmbed.setTitle("Message Flagged");
             logEmbed.setDescription(message.toString());
             logEmbed.addField("Flaggers", reaction.users.cache.map(u => `<@!${u.id}>`).join("\n"), false);
-            logEmbed.setFooter(`Author: ${member.id} | Message ID: ${message.id}`);
+            logEmbed.setFooter(`Author: ${message.author.id} | Message ID: ${message.id}`);
             logEmbed.setTimestamp(Date.now());
             logEmbed.setColor(Constants.Colors.WARNING);
             await logChannel.send(logEmbed);

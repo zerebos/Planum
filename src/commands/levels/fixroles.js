@@ -35,11 +35,11 @@ module.exports = class extends Command {
     }
 
     async run(msg) {
-  	const members = msg.guild.members.cache;
+    const members = msg.guild.members.cache;
         await msg.info(`Going to fix the role rewards of ${members.size} members. This will take approximately ${humanReadableUptime(members.size * 500)}. Please be patient.`);
         const start = Date.now();
         for (const [, member] of members) {
-	    const name = member.nickname || member.user.username;
+            const name = member.nickname || member.user.username;
             try {await this.checkRoles(msg.guild, member);}
             catch (err) {await msg.failure(`Could not fix roles for \`${name}\`.`);}
         }
