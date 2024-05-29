@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  planum:
+    container_name: planum
+    build: .
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./settings.sqlite3:/app/settings.sqlite3
+      - ./config.prod.json:/app/config.json
