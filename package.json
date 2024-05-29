@@ -15,12 +15,8 @@
     "discord.js": "^12.5.3",
     "discord.js-commando": "github:discordjs/Commando",
     "emoji-regex": "^10.0.0",
-    "erlpack": "github:discordapp/erlpack",
-    "node-opus": "^0.3.3",
-    "sodium": "^3.0.2",
     "sqlite": "^4.0.23",
-    "sqlite3": "git+https://github.com/mapbox/node-sqlite3.git",
-    "string-similarity": "^4.0.4",
+    "sqlite3": "^5.0.2",
     "utf-8-validate": "^5.0.6"
   }
 }
