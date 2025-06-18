@@ -19,7 +19,6 @@ export default {
 
         aboutEmbed.setColor("Blue");
         aboutEmbed.setAuthor({name: interaction.client.user.username, iconURL: interaction.client.user.displayAvatarURL()});
-        aboutEmbed.setDescription("**🆕 Now user-installable!** Add to your account for DM access and cross-server profiles.");
 
         const owner = await interaction.client.users.fetch(process.env.BOT_OWNER_ID!);
         if (owner) aboutEmbed.setFooter({text: `Created by @${owner.username}`, iconURL: owner.displayAvatarURL()});

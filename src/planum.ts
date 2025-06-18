@@ -3,7 +3,7 @@ import path from "node:path";
 import {fileURLToPath, pathToFileURL} from "node:url";
 
 // Import the necessary discord.js classes
-import {Client, Collection, GatewayIntentBits} from "discord.js";
+import {ActivityType, Client, Collection, GatewayIntentBits} from "discord.js";
 
 import "dotenv/config";
 import type {CommandModule} from "./types";
@@ -15,7 +15,7 @@ const __dirname = path.dirname(__filename);
 // Create a new client instance
 const client: Client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
-    presence: {activities: [{name: "🆕 Now user-installable!", type: 4}]}
+    presence: {activities: [{name: "you type", type: ActivityType.Watching}]}
 });
 
 client.commands = new Collection<string, CommandModule>();
