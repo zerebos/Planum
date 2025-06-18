@@ -12,8 +12,10 @@
 **/Dockerfile*
 **/node_modules
 **/*.sqlite3
-**/.eslintrc
+**/eslint.config.js
 LICENSE
 README.md
+TERMS.md
+PRIVACY.md
 config.json
 config.prod.json
