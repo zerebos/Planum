@@ -3,11 +3,6 @@ import type {UserLevelData} from "../types";
 import {levels} from "../db";
 
 
-// Helper function to calculate XP needed for next level
-function getXpForNextLevel(currentLevel: number): number {
-    return (currentLevel + 1) * 100; // 100 XP per level
-}
-
 /**
  * The level system is based on the scaling function with SCALE = 10:
  * XP for level = (level^2 + level) / 2 * SCALE - (level * SCALE)

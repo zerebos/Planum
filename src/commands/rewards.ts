@@ -1,5 +1,43 @@
 import {SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, PermissionFlagsBits, InteractionContextType} from "discord.js";
-import {getAllRewards, addRoleReward, removeRoleReward} from "../examples/simpleLeveling";
+import {guildRewards} from "../db";
+import type {RewardConfig} from "../types";
+
+export async function addRoleReward(guildId: string, level: number, roleId: string, shouldRemove: boolean = true): Promise<void> {
+    const rewards = await guildRewards.get(guildId) as RewardConfig[] | undefined ?? [];
+
+    const existingReward = rewards.find(r => r.roleId === roleId);
+    if (existingReward) {
+        throw new Error(`Role ${roleId} is already set as a reward at level ${existingReward.level}`);
+    }
+
+    rewards.push({ level, roleId, shouldRemove });
+    rewards.sort((a, b) => a.level - b.level);
+
+    await guildRewards.set(guildId, rewards);
+}
+
+export async function getRewardsForLevel(guildId: string, level: number): Promise<RewardConfig[]> {
+    const rewards = await guildRewards.get(guildId) as RewardConfig[] | undefined ?? [];
+    return rewards.filter(r => r.level === level);
+}
+
+export async function getAllRewards(guildId: string): Promise<RewardConfig[]> {
+    return await guildRewards.get(guildId) as RewardConfig[] | undefined ?? [];
+}
+
+export async function removeRoleReward(guildId: string, roleId: string): Promise<boolean> {
+    const rewards = await guildRewards.get(guildId) as RewardConfig[] | undefined ?? [];
+    const initialLength = rewards.length;
+
+    const filteredRewards = rewards.filter(r => r.roleId !== roleId);
+
+    if (filteredRewards.length === initialLength) {
+        return false;
+    }
+
+    await guildRewards.set(guildId, filteredRewards);
+    return true;
+}
 
 function createRewardsListEmbed(guildName: string, rewards: Array<{level: number; roleId: string; shouldRemove: boolean}>): EmbedBuilder {
     const embed = new EmbedBuilder()
