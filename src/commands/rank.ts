@@ -1,6 +1,5 @@
 import {SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, InteractionContextType} from "discord.js";
-import type {UserLevelData} from "../types";
-import {levels} from "../db";
+import {getUserLevel, getUserRank} from "../db";
 
 
 /**
@@ -12,42 +11,39 @@ import {levels} from "../db";
  * level = --------------
  *            sqrt(20)
  */
-const xpToLevel = (xp: number) => Math.round(Math.sqrt(4 * xp + 5) / Math.sqrt(20));
+const xpToLevel = (xp: number)   => Math.round(Math.sqrt(4 * xp + 5) / Math.sqrt(20));
 const levelToXp = (level: number) => Math.round((level**2 + level) / 2 * 10 - (level * 10));
 
-function createRankEmbed(user: {username: string, avatarURL: () => (string | null)}, levelData: UserLevelData, rank?: number | null) {
-    const nextLevelXp = levelToXp(levelData.level + 1);
-    const currentLevelXp = levelToXp(levelData.level);
-    const progressXp = levelData.xp - currentLevelXp;
-    const neededXp = nextLevelXp - currentLevelXp;
+function createRankEmbed(user: {username: string, avatarURL: () => (string | null)}, xp: number, level: number, rank: number) {
+    const nextLevelXp       = levelToXp(level + 1);
+    const currentLevelXp    = levelToXp(level);
+    const progressXp        = xp - currentLevelXp;
+    const neededXp          = nextLevelXp - currentLevelXp;
     const progressPercentage = Math.floor((progressXp / neededXp) * 100);
 
-    // Create a simple progress bar
     const progressBarLength = 20;
     const filledBars = Math.floor((progressPercentage / 100) * progressBarLength);
-    const emptyBars = progressBarLength - filledBars;
+    const emptyBars  = progressBarLength - filledBars;
     const progressBar = "█".repeat(filledBars) + "░".repeat(emptyBars);
 
     const embed = new EmbedBuilder()
         .setColor("Blue")
         .setAuthor({name: `${user.username}'s Rank`, iconURL: user.avatarURL()!})
         .addFields(
-            {name: "Level", value: `${levelData.level}`, inline: true},
-            {name: "XP", value: `${levelData.xp.toLocaleString()}`, inline: true},
-            {name: "Rank", value: rank ? `#${rank}` : "Unranked", inline: true},
+            {name: "Level",    value: `${level}`,                       inline: true},
+            {name: "XP",       value: `${xp.toLocaleString()}`,          inline: true},
+            {name: "Rank",     value: `#${rank}`,                       inline: true},
             {
-                name: "Progress to Next Level",
+                name:  "Progress to Next Level",
                 value: `${progressBar}\n${progressXp}/${neededXp} XP (${progressPercentage}%)`,
                 inline: false
             }
         );
 
-    if (user.avatarURL()) {
-        embed.setThumbnail(user.avatarURL()!);
-    }
-
+    if (user.avatarURL()) embed.setThumbnail(user.avatarURL()!);
     return embed;
 }
+
 export default {
     data: new SlashCommandBuilder()
         .setName("rank")
@@ -59,21 +55,12 @@ export default {
         if (!interaction.isChatInputCommand()) return;
 
         const targetUser = interaction.options.getUser("user") ?? interaction.user;
-        const guildData = (await levels.get(interaction.guildId) ?? {}) as Record<string, UserLevelData>;
-        if (!guildData[targetUser.id]) {
-            guildData[targetUser.id] = {level: 0, xp: 0} as UserLevelData; // Initialize if not found
-        }
-        const userData = guildData[targetUser.id];
-        const users = Object.entries(guildData).sort((a, b) => {
-            if (a[1].xp < b[1].xp) return 1;
-            if (a[1].xp > b[1].xp) return -1;
-            return 0;
-        });
+        const row        = getUserLevel(interaction.guildId, targetUser.id);
+        const xp         = row?.xp    ?? 0;
+        const level      = row?.level ?? xpToLevel(xp);
+        const rank       = getUserRank(interaction.guildId, xp);
 
-        const rank = users.findIndex(entry => entry[0] == targetUser.id) + 1;
-
-        // Create and send embed
-        const rankEmbed = createRankEmbed(targetUser, userData, rank);
+        const rankEmbed = createRankEmbed(targetUser, xp, level, rank);
         await interaction.reply({embeds: [rankEmbed]});
     },
 };

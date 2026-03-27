@@ -1,6 +1,5 @@
 import {type Interaction, ChatInputCommandInteraction, MessageFlags} from "discord.js";
-import type {CommandStats} from "../types";
-import {stats} from "../db";
+import {incrementCommandStat} from "../db";
 
 
 export default {
@@ -12,19 +11,19 @@ export default {
 
         if (interaction.isChatInputCommand()) {
             commandName = interaction.commandName;
-            executor = "execute";
-            await this.addStat(interaction);
+            executor    = "execute";
+            this.addStat(interaction);
         }
         else if (interaction.isAutocomplete()) {
             commandName = interaction.commandName;
-            executor = "autocomplete";
+            executor    = "autocomplete";
         }
         else if (interaction.isButton()) {
-            executor = "button";
+            executor    = "button";
             commandName = interaction.customId.split("-")[0];
         }
         else if (interaction.isModalSubmit()) {
-            executor = "modal";
+            executor    = "modal";
             commandName = interaction.customId.split("-")[0];
         }
 
@@ -44,20 +43,13 @@ export default {
         }
     },
 
-    async addStat(interaction: ChatInputCommandInteraction) {
-        const key = interaction.guildId ?? interaction.client.user?.id;
-        const name = interaction.commandName;
-
-        // More type-safe approach
-        const existingData = await stats.get(key) as CommandStats | undefined;
-        const data: CommandStats = existingData ?? {commands: {}};
-
-        // Ensure commands object exists
-        data.commands ??= {};
-
-        // Increment command count
-        data.commands[name] = (data.commands[name] ?? 0) + 1;
-
-        await stats.set(key, data);
+    addStat(interaction: ChatInputCommandInteraction) {
+        const contextId = interaction.guildId ?? interaction.client.user?.id;
+        if (!contextId) return;
+        try {
+            incrementCommandStat(contextId, interaction.commandName);
+        } catch (err) {
+            console.error("Failed to record command stat:", err);
+        }
     }
 };

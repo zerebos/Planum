@@ -8,23 +8,28 @@
     "start": "bun run --bun src/planum.ts",
     "deploy": "bun run --bun scripts/deploy-commands.ts",
     "clear": "bun run --bun scripts/deploy-commands.ts --clear",
-    "validate": "bun run --bun scripts/validate-env.ts"
+    "validate": "bun run --bun scripts/validate-env.ts",
+    "web": "bun run --bun src/web/server.ts",
+    "migrate": "bun run --bun scripts/migrate-to-drizzle.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "author": "Zack Rauen",
   "license": "MIT",
-   "devDependencies": {
+  "devDependencies": {
+    "@types/bun": "^1.3.11",
     "@zerebos/eslint-config": "^1.0.0",
     "@zerebos/eslint-config-typescript": "^1.0.0",
+    "drizzle-kit": "^0.31.10",
     "eslint": "^9.29.0"
   },
   "dependencies": {
     "@discordjs/core": "^2.1.0",
     "@discordjs/rest": "^2.5.0",
-    "emoji-regex": "^10.4.0",
-    "@keyv/sqlite": "^4.0.4",
     "discord.js": "^14.19.3",
     "dotenv": "^16.5.0",
-    "keyv": "^5.3.4"
-  },
-  "overrides": { "sqlite3": { "prebuild-install": "7.1.3" } }
+    "drizzle-orm": "^0.45.1",
+    "emoji-regex": "^10.4.0",
+    "hono": "^4.12.9"
+  }
 }
