@@ -1,6 +1,5 @@
 import type {Guild, GuildMember, Message, TextChannel} from "discord.js";
-import type {RewardConfig, UserLevelData} from "../types";
-import {guildRewards, levels} from "../db";
+import {getGuildRewards, getUserLevel, upsertUserLevel} from "../db";
 import {formatString} from "../utils/strings";
 
 
@@ -22,60 +21,51 @@ export default {
     async execute(message: Message) {
         if (!message.guild || message.author.bot || !message.member) return;
         if (onCooldown.has(message.author.id)) return;
-        onCooldown.add(message.author.id); // Add to cooldown
+        onCooldown.add(message.author.id);
 
         const words = message.content.split(/\s+/);
         if (words.length >= 5) {
-            await this.adjustXp(message.guild, message.channel as TextChannel, message.member, 1)
+            await this.adjustXp(message.guild, message.channel as TextChannel, message.member, 1);
         }
 
-
-        await new Promise<void>(resolve => setTimeout(resolve, 5000)); // Simulate cooldown
-        onCooldown.delete(message.author.id); // Remove from cooldown
+        await new Promise<void>(resolve => setTimeout(resolve, 5000));
+        onCooldown.delete(message.author.id);
     },
 
     async adjustXp(guild: Guild, channel: TextChannel, user: GuildMember, amount: number) {
-        const guildData = await levels.get(guild.id) as Record<string, UserLevelData> | undefined ?? {};
-        if (!guildData[user.id]) guildData[user.id] = {level: 0, xp: 0}; // If user didn't exist
-        const userData = guildData[user.id];
+        const existing   = getUserLevel(guild.id, user.id);
+        const currentXp  = existing?.xp ?? 0;
+        const originalLevel = existing?.level ?? 0;
 
-        userData.xp = userData.xp + amount; // Add the xp amount
-        const originalLevel = userData.level;
-        const newLevel = getLevel(userData.xp);
-        userData.level = newLevel;
-        guildData[user.id] = userData;
-        await levels.set(guild.id, guildData);
-        if (newLevel === originalLevel) return; // Same level, nothing to do
+        const newXp    = currentXp + amount;
+        const newLevel = getLevel(newXp);
+        upsertUserLevel(guild.id, user.id, newXp, newLevel);
 
-        // TODO: re-add config system
-        // User levelled up, time to do stuff
-        // const config = guild.settings.get("levelsConfig", defaultConfig);
-        // if (config.levelUpMessage) {
-            const message = formatString(`Good job, {{user}}, you are now level {{level}}! You're one step closer to being a Legend!`, {user: user.toString(), level: newLevel});
-            // if (config.shouldDM) await user.send(message);
-            // else await channel.send(message);
-            channel.send(message);
-        // }
+        if (newLevel === originalLevel) return;
 
-        // Message handled, time to check for role rewards
-        const rewards = await guildRewards.get(guild.id) as RewardConfig[] | undefined ?? [];
-        if (!rewards || !rewards.length) return; // Already handled message, if no rewards then nothing to do
-        const availableRewards = rewards.filter(r => r.level <= newLevel).sort((a, b) => {
-            if (a.level < b.level) return -1;
-            if (a.level > b.level) return 1;
-            return 0;
-        }).reverse();
-        const needToCheck = availableRewards.slice(1); // These lower roles need to be scrutinized
+        // TODO: re-add per-guild config (levelUpMessage, shouldDm)
+        const msgText = formatString(
+            `Good job, {{user}}, you are now level {{level}}! You're one step closer to being a Legend!`,
+            {user: user.toString(), level: newLevel}
+        );
+        channel.send(msgText);
 
-        // [top role for level, any below that should not be removed]
-        const shouldHave = [availableRewards[0], ...needToCheck.filter(r => !r.shouldRemove)].map(r => r.roleId);
+        const rewards = getGuildRewards(guild.id);
+        if (!rewards.length) return;
 
-        // [Roles above level (just in case adjusting downwards), any below that *should* be removed]
-        const shouldNotHave = [...rewards.filter(r => r.level > newLevel), ...needToCheck.filter(r => r.shouldRemove)].map(r => r.roleId);
+        const availableRewards = rewards
+            .filter(r => r.level <= newLevel)
+            .sort((a, b) => b.level - a.level);
+        const needToCheck = availableRewards.slice(1);
+
+        // Top reward + any lower rewards that should NOT be removed
+        const shouldHave = [availableRewards[0], ...needToCheck.filter(r => !r.removePrevious)].map(r => r.roleId);
+        // Rewards above the current level + lower rewards that SHOULD be removed
+        const shouldNotHave = [...rewards.filter(r => r.level > newLevel), ...needToCheck.filter(r => r.removePrevious)].map(r => r.roleId);
 
         const member = guild.members.cache.get(user.id);
-        if (!member) return; // uh oh
+        if (!member) return;
         if (shouldNotHave.length) await member.roles.remove(shouldNotHave, "Planum Rewards");
-        if (shouldHave.length) await member.roles.add(shouldHave, "Planum Rewards");
+        if (shouldHave.length)    await member.roles.add(shouldHave,    "Planum Rewards");
     }
 };

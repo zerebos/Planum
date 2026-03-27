@@ -1,4 +1,3 @@
-// src/types.ts
 import {AutocompleteInteraction, BaseInteraction, ButtonInteraction, ChatInputCommandInteraction, Collection, ModalSubmitInteraction, SlashCommandBuilder} from "discord.js";
 
 
@@ -25,46 +24,7 @@ export interface EventModule {
     execute: (...args: unknown[]) => Promise<void>;
 }
 
-export interface CommandStats {
-    commands?: {
-        [key: string]: number;
-    }
-}
-
-// Leveling system types
-export interface UserLevelData {
-    level: number;
-    xp: number;
-}
-
-export interface GuildConfig {
-    ignoredRoles: string[];
-    ignoredChannels: string[];
-    levelUpMessage: string;
-    shouldDM: boolean;
-}
-
-export interface RewardConfig {
-    level: number;
-    roleId: string;
-    shouldRemove: boolean; // Whether to remove when reaching next tier
-}
-
-// Efficient leaderboard types
-export interface LeaderboardEntry {
-    userId: string;
-    level: number;
-    xp: number;
-    rank: number;
-}
-
-export interface CachedLeaderboard {
-    entries: LeaderboardEntry[];
-    lastUpdated: number;
-    totalUsers: number;
-}
-
-// Profile data (if this is for a different feature like table tennis profiles)
+// Profile data (for future features such as table-tennis player profiles)
 export interface ProfileData {
     forehand?: string;
     backhand?: string;
